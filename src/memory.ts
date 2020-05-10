@@ -2,7 +2,7 @@ import { CRUD, IId, ItemList, IItem } from "./item";
 import { generateUniqueId } from "./utils";
 
 export interface IMemory extends IId {
-  due: Date;
+  due: string;
   itemId: string;
   score: number;
 }
@@ -20,7 +20,7 @@ export class MemoryList<T extends IId> extends CRUD<IMemory> {
     const date = new Date();
     return this.add({
       id: generateUniqueId(),
-      due: date,
+      due: date.toISOString(),
       score: 0,
       itemId,
     });
@@ -33,15 +33,14 @@ export class MemoryList<T extends IId> extends CRUD<IMemory> {
   };
   getDueMemories = () => {
     return this.items.filter((memory) => {
-      console.warn(memory.itemId, memory.score);
-      return memory.due.valueOf() < new Date().valueOf();
+      return new Date(memory.due).valueOf() < new Date().valueOf();
     });
   };
   private updateTimeBasedOnScore = (itemId: string) => {
     const memory = this.getItemById(itemId);
     if (!memory) return;
     const score = this.getScore(itemId);
-    memory.due = addHours(memory.due)(score);
+    memory.due = addHours(new Date(memory.due))(score).toISOString();
   };
   remember = (itemId: string) => {
     const memory = this.getItemById(itemId);

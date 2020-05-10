@@ -13,7 +13,9 @@ it("should assign time (one hour from now) to new memories", () => {
   expect(result[0].due).toBeTruthy();
   expect(
     Math.abs(
-      Math.round((result[0].due.valueOf() - new Date().valueOf()) / 100000)
+      Math.round(
+        (new Date(result[0].due).valueOf() - new Date().valueOf()) / 100000
+      )
     )
   ).toEqual(0);
 });
@@ -26,7 +28,9 @@ it("should get all the memories that are past the due time", () => {
   memoryList.memorize(item1.id);
   memoryList.memorize(item2.id);
   expect(memoryList.getDueMemories()).toEqual([]);
-  memoryList.update(memoryList.items[0].id, { due: addHours(new Date())(-1) });
+  memoryList.update(memoryList.items[0].id, {
+    due: addHours(new Date())(-1).toISOString(),
+  });
   expect(memoryList.getDueMemories()[0]).toEqual(memoryList.items[0]);
 });
 
@@ -103,4 +107,4 @@ it("should be such that higher score forgotten items are farther in time than th
   ).toBeTruthy();
 });
 
-it("should not decrease score below 0");
+// it("should not decrease score below 0");
