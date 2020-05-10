@@ -1,7 +1,7 @@
-import { MemoryList, addHours, ItemMemoryAdapter } from "./memory";
-import { generateUniqueId } from "./utils";
+import { Subject } from "rxjs";
 import { ItemList } from "./item";
-import { Subject, merge } from "rxjs";
+import { ItemMemoryAdapter, MemoryList } from "./memory";
+import { generateUniqueId } from "./utils";
 
 const AddSubject = new Subject<string>();
 const RememberSubject = new Subject<string>();
@@ -82,12 +82,12 @@ document.addEventListener("click", (e) => {
   }
 });
 
-RememberSubject.subscribe((itemId) => {
+RememberSubject.subscribe((itemId: string) => {
   itemMemoryAdapter.memoryList.remember(itemId);
   RefreshSubject.next();
 });
 
-ForgetSubject.subscribe((itemId) => {
+ForgetSubject.subscribe((itemId: string) => {
   itemMemoryAdapter.memoryList.forget(itemId);
   RefreshSubject.next();
 });
@@ -99,7 +99,7 @@ RefreshSubject.subscribe(() => {
   app.append(generatePage());
 });
 
-AddSubject.subscribe((value) => {
+AddSubject.subscribe((value: string) => {
   itemMemoryAdapter.addItem(value);
   RefreshSubject.next();
 });
