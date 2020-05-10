@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/kino6052/memory#readme",
   "dependencies": {
+    "@types/jest": "^25.2.1",
     "dexie": "^3.0.1",
     "jest": "^26.0.1",
     "rxjs": "^6.5.5",
