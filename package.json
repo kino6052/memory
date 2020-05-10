@@ -19,6 +19,7 @@
   "dependencies": {
     "dexie": "^3.0.1",
     "jest": "^26.0.1",
-    "rxjs": "^6.5.5"
+    "rxjs": "^6.5.5",
+    "typescript": "^3.8.3"
   }
 }
