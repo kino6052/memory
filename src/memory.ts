@@ -40,8 +40,9 @@ export class MemoryList<T extends IId> extends CRUD<IMemory> {
     const memory = this.getItemById(itemId);
     if (!memory) return;
     const score = this.getScore(itemId);
-    console.warn(score);
-    memory.due = addHours(new Date(memory.due))(score).toISOString();
+    console.warn(score, "" + memory.due);
+    memory.due = addHours(new Date(memory.due))(score + 1).toISOString();
+    console.warn("" + memory.due);
   };
   remember = (itemId: string) => {
     const memory = this.getItemById(itemId);
@@ -66,11 +67,13 @@ export class ItemMemoryAdapter {
   constructor(public memoryList: MemoryList<IItem>) {}
   getDueItems = () => {
     const memories = this.memoryList.getDueMemories();
+    const memoryItems = memories.map((memory) => memory.itemId);
     const items = this.memoryList.crud.items.filter(({ id }) =>
-      memories.map((memory) => memory.itemId).includes(id)
+      memoryItems.includes(id)
     );
     return items.reduce((acc, _, index) => {
-      return [...acc, { ...items[index], id: memories[index].id }];
+      const id = memories.find((m) => m.itemId === items[index].id)?.id || "";
+      return [...acc, { ...items[index], id }];
     }, [] as Array<IItem>);
   };
   addItem = (name: string) => {

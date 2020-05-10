@@ -100,7 +100,7 @@ export class DexieItemsBackend implements IBackend {
     this.value = value;
     try {
       const items = JSON.parse(this.value);
-      console.warn("Items", items);
+      // console.warn("Items", items);
       // @ts-ignore
       this.db.items.clear().then(() => {
         // @ts-ignore

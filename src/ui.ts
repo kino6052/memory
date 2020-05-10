@@ -60,9 +60,11 @@ const generateMemory = (id: string, name: string) => {
   const RememberButton = document.createElement("button");
   RememberButton.innerText = "Remember";
   RememberButton.setAttribute("class", "remember");
+  RememberButton.setAttribute("data-id", id);
   const ForgetButton = document.createElement("button");
   ForgetButton.innerText = "Forget";
   ForgetButton.setAttribute("class", "forget");
+  ForgetButton.setAttribute("data-id", id);
   const Wrapper = document.createElement("div");
   Wrapper.setAttribute("id", id);
   Wrapper.setAttribute("class", "memory");
@@ -101,8 +103,8 @@ document.addEventListener("keypress", (e) => {
 const onButtonClick = (el: HTMLElement) => {
   const isButton = el.tagName === "BUTTON";
   if (!isButton) return;
-  const parentId = el.parentElement?.id;
-  console.warn(parentId);
+  const parentId = el.getAttribute("data-id");
+  if (!parentId) return;
   if (el.classList[0] === "remember") {
     RememberSubject.next(parentId);
   } else if (el.classList[0] === "forget") {
@@ -117,12 +119,13 @@ document.addEventListener("click", (e) => {
 });
 
 RememberSubject.subscribe((itemId: string) => {
+  console.warn("remember", itemId);
   itemMemoryAdapter.memoryList.remember(itemId);
   RefreshSubject.next();
 });
 
 ForgetSubject.subscribe((itemId: string) => {
-  console.warn(itemId);
+  console.warn("forget", itemId);
   itemMemoryAdapter.memoryList.forget(itemId);
   RefreshSubject.next();
 });
