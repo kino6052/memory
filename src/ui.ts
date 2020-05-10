@@ -105,7 +105,7 @@ const onButtonClick = (el: HTMLElement) => {
   console.warn(parentId);
   if (el.classList[0] === "remember") {
     RememberSubject.next(parentId);
-  } else if (el.classList[1] === "forget") {
+  } else if (el.classList[0] === "forget") {
     ForgetSubject.next(parentId);
   }
 };
@@ -122,6 +122,7 @@ RememberSubject.subscribe((itemId: string) => {
 });
 
 ForgetSubject.subscribe((itemId: string) => {
+  console.warn(itemId);
   itemMemoryAdapter.memoryList.forget(itemId);
   RefreshSubject.next();
 });
@@ -142,3 +143,6 @@ init((memories, items) => {
   memoryList.items = memories;
   RefreshSubject.next();
 });
+
+//@ts-ignore
+window.RefreshSubject = RefreshSubject;
