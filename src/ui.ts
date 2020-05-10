@@ -127,18 +127,17 @@ ForgetSubject.subscribe((itemId: string) => {
 });
 
 RefreshSubject.subscribe(() => {
+  persistenceAdapterItems.save();
+  persistenceAdapterMemory.save();
   refreshPage();
 });
 
 AddSubject.subscribe((value: string) => {
   itemMemoryAdapter.addItem(value);
-  persistenceAdapterItems.save();
-  persistenceAdapterMemory.save();
   RefreshSubject.next();
 });
 
 init((memories, items) => {
-  console.warn("test", memories, items);
   itemList.items = items;
   memoryList.items = memories;
   RefreshSubject.next();
