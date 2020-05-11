@@ -1,6 +1,6 @@
 import { CRUD, IId, ItemList } from "./item";
 import { generateUniqueId } from "./utils";
-import { MemoryList, addHours } from "./memory";
+import { MemoryList, addHours, ItemMemoryAdapter } from "./memory";
 
 it("should assign time (one hour from now) to new memories", () => {
   const item1 = { id: generateUniqueId(), name: "Item1" };
@@ -29,7 +29,7 @@ it("should get all the memories that are past the due time", () => {
   memoryList.memorize(item2.id);
   expect(memoryList.getDueMemories()).toEqual([]);
   memoryList.update(memoryList.items[0].id, {
-    due: addHours(new Date())(-1).toISOString(),
+    due: addHours(new Date())(-1).toISOString()
   });
   expect(memoryList.getDueMemories()[0]).toEqual(memoryList.items[0]);
 });
@@ -107,4 +107,41 @@ it("should be such that higher score forgotten items are farther in time than th
   ).toBeTruthy();
 });
 
-// it("should not decrease score below 0");
+it("should not decrease score below 0", () => {
+  const item1 = { id: generateUniqueId(), name: "Item1" };
+  const item2 = { id: generateUniqueId(), name: "Item2" };
+  const itemList = new ItemList([item1, item2]);
+  const memoryList = new MemoryList(itemList);
+  memoryList.memorize(item1.id);
+  memoryList.memorize(item2.id);
+  memoryList.forget(memoryList.items[0].id);
+  memoryList.forget(memoryList.items[1].id);
+  expect(memoryList.items[0].score === 0).toBeTruthy();
+  expect(memoryList.items[1].score === 0).toBeTruthy();
+});
+
+it("should generate due items correctly", () => {
+  const item1 = { id: generateUniqueId(), name: "Item1" };
+  const item2 = { id: generateUniqueId(), name: "Item2" };
+  const itemList = new ItemList([item1, item2]);
+  const memoryList = new MemoryList(itemList);
+  memoryList.memorize(item1.id);
+  memoryList.memorize(item2.id);
+  expect(memoryList.getDueMemories()).toEqual([]);
+  memoryList.update(memoryList.items[0].id, {
+    due: addHours(new Date())(-0.1).toISOString()
+  });
+  memoryList.update(memoryList.items[1].id, {
+    due: addHours(new Date())(-0.1).toISOString()
+  });
+  const adapter = new ItemMemoryAdapter(memoryList);
+  expect(adapter.getDueItems().length).toBe(2);
+  expect(adapter.getDueItems().map(({ id }) => id)).toEqual(
+    memoryList.getDueMemories().map(({ id }) => id)
+  );
+  adapter.memoryList.forget(memoryList.getDueMemories()[0].id);
+  expect(adapter.getDueItems().length).toBe(1);
+  expect(adapter.getDueItems().map(({ id }) => id)).toEqual(
+    memoryList.getDueMemories().map(({ id }) => id)
+  );
+});
