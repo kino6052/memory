@@ -147,7 +147,7 @@ init((memories, items) => {
   RefreshSubject.next();
 });
 
-const download = () => {
+const downloadItems = () => {
   const result = itemList.items;
   if (!result) return;
   const dataStr =
@@ -155,7 +155,19 @@ const download = () => {
     encodeURIComponent(JSON.stringify(result));
   const dlAnchorElem = document.createElement("a");
   dlAnchorElem.setAttribute("href", dataStr);
-  dlAnchorElem.setAttribute("download", `Memory.${new Date().valueOf()}.json`);
+  dlAnchorElem.setAttribute("download", `Memory.Items.${new Date().valueOf()}.json`);
+  dlAnchorElem.click();
+}
+
+const downloadMemories = () => {
+  const result = memoryList.items;
+  if (!result) return;
+  const dataStr =
+    "data:text/json;charset=utf-8," +
+    encodeURIComponent(JSON.stringify(result));
+  const dlAnchorElem = document.createElement("a");
+  dlAnchorElem.setAttribute("href", dataStr);
+  dlAnchorElem.setAttribute("download", `Memory.Memories.${new Date().valueOf()}.json`);
   dlAnchorElem.click();
 }
 
@@ -166,4 +178,6 @@ window.itemList = itemList;
 //@ts-ignore
 window.memoryList = memoryList;
 //@ts-ignore
-window.download = download;
+window.downloadItems = downloadItems;
+//@ts-ignore
+window.downloadMemories = downloadMemories;
