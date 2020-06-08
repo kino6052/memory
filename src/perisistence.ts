@@ -12,6 +12,7 @@ export interface IConverter<T extends IId> {
 export interface IBackend {
   save: (value: string) => string;
   load: (cb: (value: string) => void) => void;
+  clear: () => void;
 }
 
 export class Backend implements IBackend {
@@ -23,6 +24,7 @@ export class Backend implements IBackend {
   load() {
     return this.value;
   }
+  clear() {}
 }
 
 export class LocalStorageBackend implements IBackend {
@@ -35,6 +37,7 @@ export class LocalStorageBackend implements IBackend {
   load() {
     return localStorage.getItem("test") || "";
   }
+  clear() {}
 }
 
 export class DexieMemoryBackend implements IBackend {
@@ -84,6 +87,17 @@ export class DexieMemoryBackend implements IBackend {
       cb("[]");
     }
   };
+  clear = () => {
+    try {
+      // @ts-ignore
+      this.db.memories
+        .clear()
+        .then(console.warn)
+        .catch(console.warn);
+    } catch (e) {
+      console.warn(e);
+    }
+  };
 }
 
 export class DexieItemsBackend implements IBackend {
@@ -129,6 +143,17 @@ export class DexieItemsBackend implements IBackend {
     } catch (e) {
       console.warn(e);
       cb("[]");
+    }
+  };
+  clear = () => {
+    try {
+      // @ts-ignore
+      this.db.items
+        .clear()
+        .then(console.warn)
+        .catch(console.warn);
+    } catch (e) {
+      console.warn(e);
     }
   };
 }

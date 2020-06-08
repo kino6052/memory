@@ -181,3 +181,7 @@ window.memoryList = memoryList;
 window.downloadItems = downloadItems;
 //@ts-ignore
 window.downloadMemories = downloadMemories;
+//@ts-ignore
+window.persistenceAdapterItems = persistenceAdapterItems;
+//@ts-ignore
+window.persistenceAdapterMemory = persistenceAdapterMemory;
