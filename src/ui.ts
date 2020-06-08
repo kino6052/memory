@@ -166,3 +166,4 @@ window.itemList = itemList;
 //@ts-ignore
 window.memoryList = memoryList;
 //@ts-ignore
+window.download = download;
