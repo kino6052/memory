@@ -147,5 +147,22 @@ init((memories, items) => {
   RefreshSubject.next();
 });
 
+const download = () => {
+  const result = itemList.items;
+  if (!result) return;
+  const dataStr =
+    "data:text/json;charset=utf-8," +
+    encodeURIComponent(JSON.stringify(result));
+  const dlAnchorElem = document.createElement("a");
+  dlAnchorElem.setAttribute("href", dataStr);
+  dlAnchorElem.setAttribute("download", `Memory.${new Date().valueOf()}.json`);
+  dlAnchorElem.click();
+}
+
 //@ts-ignore
 window.RefreshSubject = RefreshSubject;
+//@ts-ignore
+window.itemList = itemList;
+//@ts-ignore
+window.memoryList = memoryList;
+//@ts-ignore
