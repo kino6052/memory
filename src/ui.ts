@@ -78,9 +78,15 @@ const generateMemory = (id: string, name: string) => {
 const generatePage = () => {
   const div = document.createElement("div");
   div.append(generateMemoryInput());
-  itemMemoryAdapter
-    .getDueItems()
-    .map((item) => div.append(generateMemory(item.id, item.name)));
+  const dueItems = itemMemoryAdapter.getDueItems();
+  for (let i = 0; i < dueItems.length; i++) {
+    if (i < 100) {
+      dueItems.map((item) => div.append(generateMemory(item.id, item.name)));
+    } else {
+      const item =  dueItems[i];
+      itemMemoryAdapter.memoryList.postpone(item.id);
+    }
+  }
   return div;
 };
 

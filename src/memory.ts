@@ -40,7 +40,17 @@ export class MemoryList<T extends IId> extends CRUD<IMemory> {
     const memory = this.getItemById(itemId);
     if (!memory) return;
     const score = this.getScore(itemId);
-    memory.due = addHours(new Date())(1.1**(score + 1) + 2*Math.random()).toISOString();
+    memory.due = addHours(new Date())(1.24**(score + 1) + 2*Math.random()).toISOString();
+  };
+  private updateTimeByNumberOfHours = (itemId: string, hours: number) => {
+    const memory = this.getItemById(itemId);
+    if (!memory) return;
+    memory.due = addHours(new Date())(hours*Math.random()).toISOString();
+  };
+  postpone = (itemId: string) => {
+    const memory = this.getItemById(itemId);
+    if (!memory) return;
+    this.updateTimeByNumberOfHours(itemId, 2);
   };
   remember = (itemId: string) => {
     const memory = this.getItemById(itemId);
