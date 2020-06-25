@@ -80,10 +80,10 @@ const generatePage = () => {
   div.append(generateMemoryInput());
   const dueItems = itemMemoryAdapter.getDueItems();
   for (let i = 0; i < dueItems.length; i++) {
-    if (i < 100) {
-      dueItems.map((item) => div.append(generateMemory(item.id, item.name)));
+    const item =  dueItems[i];
+    if (i < 50) {
+      div.append(generateMemory(item.id, item.name));
     } else {
-      const item =  dueItems[i];
       itemMemoryAdapter.memoryList.postpone(item.id);
     }
   }
