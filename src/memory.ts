@@ -50,7 +50,7 @@ export class MemoryList<T extends IId> extends CRUD<IMemory> {
   postpone = (itemId: string) => {
     const memory = this.getItemById(itemId);
     if (!memory) return;
-    this.updateTimeByNumberOfHours(itemId, 2);
+    this.updateTimeByNumberOfHours(itemId, 0.5);
   };
   remember = (itemId: string) => {
     const memory = this.getItemById(itemId);
