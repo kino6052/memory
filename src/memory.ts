@@ -75,7 +75,7 @@ export class ItemMemoryAdapter {
   constructor(public memoryList: MemoryList<IItem>) {}
   getDueItems = () => {
     const memories = this.memoryList.getDueMemories();
-    const memoryItems = memories.map((memory) => memory.itemId);
+    const memoryItems = memories.sort((a, b) => a.score - b.score).map((memory) => memory.itemId);
     const items = this.memoryList.crud.items.filter(({ id }) =>
       memoryItems.includes(id)
     );
