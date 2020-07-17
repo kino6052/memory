@@ -54,16 +54,13 @@ export class DexieMemoryBackend implements IBackend {
     this.value = value;
     try {
       const memories = JSON.parse(this.value);
-      console.warn("Memories", memories);
       // // @ts-ignore
       // this.db.memories.clear().then(() => {
       // @ts-ignore
-      this.db.memories
-        .bulkPut(memories)
-        .catch((e: {}) => {
-          console.warn(e);
-        })
-        .then(console.warn);
+      this.db.memories.bulkPut(memories).catch((e: {}) => {
+        console.warn(e);
+      });
+      // .then(console.warn);
       // });
     } catch (e) {
       console.warn(e);
@@ -92,7 +89,7 @@ export class DexieMemoryBackend implements IBackend {
       // @ts-ignore
       this.db.memories
         .clear()
-        .then(console.warn)
+        // .then(console.warn)
         .catch(console.warn);
     } catch (e) {
       console.warn(e);
@@ -118,10 +115,8 @@ export class DexieItemsBackend implements IBackend {
       // @ts-ignore
       // this.db.items.clear().then(() => {
       // @ts-ignore
-      this.db.items
-        .bulkPut(items)
-        .catch(console.warn)
-        .then(console.warn);
+      this.db.items.bulkPut(items).catch(console.warn);
+      // .then(console.warn);
       // });
     } catch (e) {
       console.warn(e);
@@ -150,7 +145,7 @@ export class DexieItemsBackend implements IBackend {
       // @ts-ignore
       this.db.items
         .clear()
-        .then(console.warn)
+        // .then(console.warn)
         .catch(console.warn);
     } catch (e) {
       console.warn(e);
