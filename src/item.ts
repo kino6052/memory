@@ -18,6 +18,7 @@ export class CRUD<T extends IId> {
 export interface IItem {
   id: string;
   name: string;
+  score?: number;
 }
 
 export interface IItemList {

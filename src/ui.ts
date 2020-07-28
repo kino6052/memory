@@ -53,7 +53,8 @@ const generateMemoryInput = () => {
   return Wrapper;
 };
 
-const generateMemory = (id: string, name: string) => {
+const generateMemory = (item: IItem) => {
+  const { id, name, score } = item;
   const Heading = document.createElement("b");
   Heading.innerText = name;
   const Content = document.createElement("p");
@@ -68,6 +69,7 @@ const generateMemory = (id: string, name: string) => {
   const Wrapper = document.createElement("div");
   Wrapper.setAttribute("id", id);
   Wrapper.setAttribute("class", "memory");
+  Wrapper.setAttribute("data-score", String(score));
   Wrapper.appendChild(Heading);
   Wrapper.appendChild(Content);
   Wrapper.appendChild(RememberButton);
@@ -80,11 +82,9 @@ const generatePage = () => {
   div.append(generateMemoryInput());
   const dueItems = itemMemoryAdapter.getDueItems();
   for (let i = 0; i < dueItems.length; i++) {
-    const item =  dueItems[i];
-    if (i < 10) {
-      div.append(generateMemory(item.id, item.name));
-    } else {
-      itemMemoryAdapter.memoryList.postpone(item.id);
+    const item = dueItems[i];
+    if (i < 100) {
+      div.append(generateMemory(item));
     }
   }
   return div;
@@ -116,6 +116,7 @@ const onButtonClick = (el: HTMLElement) => {
   } else if (el.classList[0] === "forget") {
     ForgetSubject.next(parentId);
   }
+  el.parentElement?.remove();
 };
 
 document.addEventListener("click", (e) => {
@@ -139,7 +140,6 @@ ForgetSubject.subscribe((itemId: string) => {
 RefreshSubject.subscribe(() => {
   persistenceAdapterItems.save();
   persistenceAdapterMemory.save();
-  refreshPage();
 });
 
 AddSubject.subscribe((value: string) => {
@@ -161,9 +161,12 @@ const downloadItems = () => {
     encodeURIComponent(JSON.stringify(result));
   const dlAnchorElem = document.createElement("a");
   dlAnchorElem.setAttribute("href", dataStr);
-  dlAnchorElem.setAttribute("download", `Memory.Items.${new Date().valueOf()}.json`);
+  dlAnchorElem.setAttribute(
+    "download",
+    `Memory.Items.${new Date().valueOf()}.json`
+  );
   dlAnchorElem.click();
-}
+};
 
 const downloadMemories = () => {
   const result = memoryList.items;
@@ -173,12 +176,21 @@ const downloadMemories = () => {
     encodeURIComponent(JSON.stringify(result));
   const dlAnchorElem = document.createElement("a");
   dlAnchorElem.setAttribute("href", dataStr);
-  dlAnchorElem.setAttribute("download", `Memory.Memories.${new Date().valueOf()}.json`);
+  dlAnchorElem.setAttribute(
+    "download",
+    `Memory.Memories.${new Date().valueOf()}.json`
+  );
   dlAnchorElem.click();
-}
+};
+
+setTimeout(() => {
+  refreshPage();
+}, 1000);
 
 //@ts-ignore
 window.RefreshSubject = RefreshSubject;
+//@ts-ignore
+window.refreshPage = refreshPage();
 //@ts-ignore
 window.itemList = itemList;
 //@ts-ignore
